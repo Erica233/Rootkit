@@ -41,6 +41,13 @@ asmlinkage int (*original_openat)(struct pt_regs *);
 asmlinkage int sneaky_sys_openat(struct pt_regs *regs)
 {
   // Implement the sneaky part here
+
+
+
+
+
+
+
   return (*original_openat)(regs);
 }
 
@@ -65,6 +72,11 @@ static int initialize_sneaky_module(void)
   sys_call_table[__NR_openat] = (unsigned long)sneaky_sys_openat;
 
   // You need to replace other system calls you need to hack here
+
+
+
+
+
   
   // Turn write protection mode back on for sys_call_table
   disable_page_rw((void *)sys_call_table);
