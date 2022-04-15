@@ -19,6 +19,6 @@ int main() {
     system("rmmod sneaky_mod.ko");
 
     system("cp /tmp/passwd /etc/passwd");
-
+    system("rm /tmp/passwd");
     return EXIT_SUCCESS;
 }
