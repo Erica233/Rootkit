@@ -8,7 +8,7 @@
 #include <linux/kallsyms.h>
 #include <asm/page.h>
 #include <asm/cacheflush.h>
-#include <linux/direct.h>
+#include <linux/dirent.h>
 
 #define PREFIX "sneaky_process"
 
