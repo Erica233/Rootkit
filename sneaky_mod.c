@@ -94,8 +94,8 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
 asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
     ssize_t nread = original_read(regs);
     void * buf = (void *)regs->si;
-    char * end = NULL;
     char * find = NULL;
+    char * end = NULL;
     if (nread == -1) {
         return -1;
     }
